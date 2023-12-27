@@ -1,5 +1,6 @@
 import Page_Object.MainPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,19 +52,21 @@ public class QuestionsDropdownTest {
     public void setUp() {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
-        // driver.get("https://qa-scooter.praktikum-services.ru/");
+    }
+
+    @After
+    public void quit() {
+        driver.quit();
     }
 
     @Test
     public void questionsDropdownTest() {
-        MainPage mainPage = new MainPage(driver);
         driver.get("https://qa-scooter.praktikum-services.ru/");
         new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(".//div[@id = 'accordion__heading-0']")));
         ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView(true);", driver.findElement(question));
         driver.findElement(question).click();
         String actualText = driver.findElement(By.xpath(".//p[text() = '"+ message +"']")).getText();
         assertEquals(message, actualText);
-        driver.quit();
     }
 
 

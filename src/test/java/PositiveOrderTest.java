@@ -1,12 +1,13 @@
-import Page_Object.MainPage;
 import Page_Object.OrderPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -29,21 +30,23 @@ public class PositiveOrderTest {
         driver.get("https://qa-scooter.praktikum-services.ru/");
     }
 
+    @After
+    public void quit() {
+        driver.quit();
+    }
+
     @Test
     public void PositiveOrderTestTopButton() {
-        MainPage mainPage = new MainPage(driver);
         driver.findElement(orderButtonPageTop).click();
         OrderPage orderPage = new OrderPage(driver);
         orderPage.firstPageOfOrder("Александр", "Боронкин", "Лестева 21к2", "89999133632");
         orderPage.secondPageOfOrder("Второй подъезд");
         Boolean isButtonCheckOrderPresent = driver.findElement(By.xpath("/html/body/div/div/div[2]/div[5]/div[2]/button")) != null;
         assertEquals(true, isButtonCheckOrderPresent);
-        driver.quit();
     }
 
     @Test
     public void PositiveOrderTestMiddleButton() {
-        MainPage mainPage = new MainPage(driver);
         new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(".//button[@class = 'Button_Button__ra12g']")));
         ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView(true);", driver.findElement(By.xpath(".//div[@class='Home_FinishButton__1_cWm']//button[text()='Заказать']")));
         driver.findElement(orderButtonPageMiddle).click();
@@ -52,7 +55,6 @@ public class PositiveOrderTest {
         orderPage.secondPageOfOrderFiveDays("Быстрее скорее надо есть самокат");
         Boolean isButtonCheckOrderPresent = driver.findElement(By.xpath("/html/body/div/div/div[2]/div[5]/div[2]/button")) != null;
         assertEquals(true, isButtonCheckOrderPresent);
-        driver.quit();
 
 
     }
